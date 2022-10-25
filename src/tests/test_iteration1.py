@@ -36,6 +36,12 @@ def test_character_ac_exists():
     sims.create('Sims McBirdman', "Chaotic Neutral")
     assert sims.get('ac') is not None
 
+def test_character_ac_change():
+    sims = Character()
+    sims.create('Sims McBirdman', "Chaotic Neutral")
+    sims.update('ac', 2)
+    assert sims.get('ac') is 12
+
 def test_character_health():
     sims = Character()
     sims.create('Sims McBirdman', "Chaotic Neutral")
@@ -89,8 +95,38 @@ def test_character_abilities():
     sims = Character()
     sims.create('Sims McBirdman', 'Chaotic Neutral')
     assert sims.get('dex') == 10
-    
+
 def test_character_modifiers():
     sims = Character()
+    sims.create('Sims McBirdman', 'Chaotic Neutral')
     sims.add('dexterity', 15)
-    assert sims.modifiers('dexterity') == 15
+    assert sims.modifiers('dexterity') == 2
+
+def test_character_modifiers2():
+    sims = Character()
+    sims.create('Sims McBirdman', 'Chaotic Neutral')
+    sims.add('dexterity', 19)
+    assert sims.modifiers('dexterity') == 4
+
+def test_character_modifiers_negative():
+    sims = Character()
+    sims.create('Sims McBirdman', 'Chaotic Neutral')
+    sims.add('dexterity', 4)
+    assert sims.modifiers('dexterity') == -3
+
+def test_character_modifiers_negative2():
+    sims = Character()
+    sims.create('Sims McBirdman', 'Chaotic Neutral')
+    sims.add('dexterity', 7)
+    assert sims.modifiers('dexterity') == -2
+
+def test_character_modifiers_negative3():
+    sims = Character()
+    sims.create('Sims McBirdman', 'Chaotic Neutral')
+    sims.add('dexterity', 3)
+    assert sims.modifiers('dexterity') == -4
+
+def test_character_adding_attribute():
+    sims = Character()
+    sims.create('Sims McBirdman', 'Chaotic Neutral')
+    
