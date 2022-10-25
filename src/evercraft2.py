@@ -11,7 +11,8 @@ class Character():
         self.chr = 10
         self.con = 10
         self.int = 10
-
+        self.abilities = ['dex', 'str', 'con', 'wis', 'int', 'chr']
+    ## Attack, checks the dice_roll against the enemy's AC. Sets to dead if health is equal to or lower than 0
     def attack(self, dice_roll, enemy):
         if(dice_roll == 20):
             enemy.health -= 2
@@ -25,6 +26,6 @@ class Character():
             return True
         else:
             return False
-    
+
     def modifiers(self, ability):
         return(getattr(self, ability) - 10 ) // 2
