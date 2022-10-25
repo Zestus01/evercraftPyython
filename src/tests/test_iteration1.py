@@ -61,11 +61,11 @@ def test_character_critical_hit():
     sims.attack(20, rat)
     assert rat.health == 3
 
-def test_character_isAlive():
+def test_character_is_alive():
     sims = Character('Sims McBirdman', "Chaotic Neutral")
     assert sims.is_alive
 
-def test_character_ratDeath():
+def test_character_rat_death():
     rat = Character('rat', 'Chaotic Evil')
     sims = Character('Sims McBirdman', "Chaotic Neutral")
     rat.health = 1
