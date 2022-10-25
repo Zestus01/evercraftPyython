@@ -1,4 +1,5 @@
 class Character():
+
     def __init__(self, name, alignment):
         self.name = name
         self.alignment = alignment
@@ -19,11 +20,13 @@ class Character():
             if(enemy.health <= 0):
                 enemy.is_alive = False
             return True
+
         if(dice_roll >= enemy.ac):
             enemy.health -= 1
             if(enemy.health <= 0):
                 enemy.is_alive = False
             return True
+            
         else:
             return False
 
