@@ -1,132 +1,106 @@
-from evercraft import *
+from evercraft2 import *
 
 def test_character_exists():
-    assert Character() is not None
+    assert Character('Sims McBirdman', "Chaotic Neutral") is not None
 
 def test_character_name():
-    variable_name = Character()
-    variable_name.create('Sims', 'Chaotic')
-    assert variable_name.get('name') is not None
+    variable_name = Character('Sims McBirdman', "Chaotic Neutral")
+    assert variable_name.name is not None
 
 def test_set_character_name():
     name = 'Sims McBirdman'
-    character1 = Character()
-    character1.create(name, 'Chaotic Neutral')
-    assert character1.get('name') is name
+    character1 = Character(name, "Chaotic Neutral")
+    assert character1.name is name
 
 def test_character2_name():
-    character2 = Character()
-    character2.create('Adfa', 'Neutral Good')
-    assert character2.get('name') is 'Adfa'
+    character2 = Character('Adfa', "Neutral Good")
+    assert character2.name is 'Adfa'
 
 def test_character_change_name():
     name = 'Sims McBirdman'
-    character1 = Character()
-    character1.create(name, 'Chaotic Neutral')
-    character1.add('name', 'Adfa')
-    assert character1.get('name') is not name
+    character1 = Character(name, 'Chaotic Neutral')
+    character1.name = 'Adfa'
+    assert character1.name is not name
 
 def test_character_alignment():
-    sims = Character()
-    sims.create('Sims McBirdman', "Chaotic Neutral")
-    assert sims.get('alignment') is not None
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    assert sims.alignment is not None
 
 def test_character_ac_exists():
-    sims = Character()
-    sims.create('Sims McBirdman', "Chaotic Neutral")
-    assert sims.get('ac') is not None
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    assert sims.ac is not None
 
 def test_character_ac_change():
-    sims = Character()
-    sims.create('Sims McBirdman', "Chaotic Neutral")
-    sims.update('ac', 2)
-    assert sims.get('ac') is 12
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    sims.ac = sims.ac + 2
+    assert sims.ac is 12
 
 def test_character_health():
-    sims = Character()
-    sims.create('Sims McBirdman', "Chaotic Neutral")
-    assert sims.get('health') == 5
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    assert sims.health == 5
 
 def test_character_attack_hit():
-    sims = Character()
-    sims.create('Sims McBirdman', "Chaotic Neutral")
-    rat = Character()
-    rat.create("rat", "Chaotic Evil")
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    rat = Character('rat', 'Chaotic Evil')
     assert sims.attack(12, rat) == True
 
 def test_character_attack_miss():
-    sims = Character()
-    rat = Character()
-    sims.create('sims McBirdman', 'Chaotic neutral')
-    rat.create('rat', 'Chaotic Evil')
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    rat = Character('rat', 'Chaotic Evil')
     assert sims.attack(1, rat) == False
 
 def test_character_attack_damage():
-    sims = Character()
-    rat = Character()
-    sims.create('Sims mcBirdman', "Chaotic Neutral")
-    rat.create('rat', 'Chaotic Evil')
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    rat = Character('rat', 'Chaotic Evil')
     sims.attack(12, rat)
-    assert rat.get('health') != 5
+    assert rat.health != 5
 
 def test_character_critical_hit():
-    sims = Character()
-    rat = Character()
-    sims.create('Sims McBirdman', 'Chaotic neutral')
-    rat.create('rat', 'Chaotic Evil')
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    rat = Character('rat', 'Chaotic Evil')
     sims.attack(20, rat)
-    assert rat.get('health') == 3
+    assert rat.health == 3
 
 def test_character_isAlive():
-    sims = Character()
-    sims.create('Sims McBirdman', 'Chaotic Neutral')
-    assert sims.get('is_alive')
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    assert sims.is_alive
 
 def test_character_ratDeath():
-    rat = Character()
-    rat.create("rat", "Chaotic Evil")
-    sims = Character()
-    sims.create('Sims McBirdman', 'Chaotic Neutral')
-    rat.add('health', 1)
+    rat = Character('rat', 'Chaotic Evil')
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    rat.health = 1
     sims.attack(14, rat)
-    assert not rat.get('is_alive')
+    assert not rat.is_alive
 
 def test_character_abilities():
-    sims = Character()
-    sims.create('Sims McBirdman', 'Chaotic Neutral')
-    assert sims.get('dex') == 10
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    assert sims.dex == 10
 
 def test_character_modifiers():
-    sims = Character()
-    sims.create('Sims McBirdman', 'Chaotic Neutral')
-    sims.add('dexterity', 15)
-    assert sims.modifiers('dexterity') == 2
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    sims.dex = 14
+    assert sims.modifiers('dex') == 2
 
 def test_character_modifiers2():
-    sims = Character()
-    sims.create('Sims McBirdman', 'Chaotic Neutral')
-    sims.add('dexterity', 19)
-    assert sims.modifiers('dexterity') == 4
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    sims.dex = 19
+    assert sims.modifiers('dex') == 4
 
 def test_character_modifiers_negative():
-    sims = Character()
-    sims.create('Sims McBirdman', 'Chaotic Neutral')
-    sims.add('dexterity', 4)
-    assert sims.modifiers('dexterity') == -3
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    sims.dex =  4
+    assert sims.modifiers('dex') == -3
 
 def test_character_modifiers_negative2():
-    sims = Character()
-    sims.create('Sims McBirdman', 'Chaotic Neutral')
-    sims.add('dexterity', 7)
-    assert sims.modifiers('dexterity') == -2
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    sims.dex =  7
+    assert sims.modifiers('dex') == -2
 
 def test_character_modifiers_negative3():
-    sims = Character()
-    sims.create('Sims McBirdman', 'Chaotic Neutral')
-    sims.add('dexterity', 3)
-    assert sims.modifiers('dexterity') == -4
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    sims.dex =  3
+    assert sims.modifiers('dex') == -4
 
 def test_character_adding_attribute():
-    sims = Character()
-    sims.create('Sims McBirdman', 'Chaotic Neutral')
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
     
