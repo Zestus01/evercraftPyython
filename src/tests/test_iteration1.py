@@ -177,6 +177,21 @@ def test_character_level_up():
     sims.attack(12, rat)
     assert sims.level == 2
 
+def test_character_level_3():
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    rat = Character('rat', 'Chaotic Evil')
+    sims.exp = 1990
+    sims.level = 2
+    sims.attack(12, rat)
+    assert sims.level == 3
+
+def test_character_repeat_hit_level():
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    rat = Character('rat', 'Chaotic Evil')
+    for i in range(0,100):
+        sims.attack(12, rat)
+    assert sims.level == 2    
+
 def test_character_hit_no_level():
     sims = Character('Sims McBirdman', "Chaotic Neutral")
     rat = Character('rat', 'Chaotic Evil')
@@ -197,6 +212,7 @@ def test_character_damage_increase():
     sims.level = 2
     sims.attack(10, rat)
     assert rat.health == 3
+
 
 def test_character_odd_level():
     sims = Character('Sims McBirdman', "Chaotic Neutral")

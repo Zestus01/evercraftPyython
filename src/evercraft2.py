@@ -23,8 +23,8 @@ class Character():
     def attack(self, dice_roll, enemy):
         ac = (enemy.ac + enemy.modifiers('dex'))
         damage = self.modifiers('str') + (self.level // 2)
-        dice_mod = damage
-        if(damage <= 0):
+        to_hit = damage
+        if(damage < 0):
             damage = 0
         if(dice_roll == 20):
             enemy.health -= (2 + (damage * 2))
@@ -33,7 +33,7 @@ class Character():
                 enemy.is_alive = False
             return True
 
-        if((dice_roll + dice_mod) >= ac):
+        if((dice_roll + to_hit) >= ac):
             enemy.health -= (1 + damage)
             self.gain_exp()
             if(enemy.health <= 0):
@@ -57,3 +57,30 @@ class Character():
             self.health += 5 + self.modifiers('con')
         else:
             self.health += 5
+
+class Fighter(Character):
+    def __init__(self, name, alignment):
+        Character.__init__(self, name, alignment)
+        
+    def attack(self, dice_roll, enemy):
+        ac = (enemy.ac + enemy.modifiers('dex'))
+        damage = self.modifiers('str') + (self.level)
+        to_hit = damage
+        if(damage < 0):
+            damage = 0
+        if(dice_roll == 20):
+            enemy.health -= (2 + (damage * 2))
+            self.gain_exp()
+            if(enemy.health <= 0):
+                enemy.is_alive = False
+            return True
+
+        if((dice_roll + to_hit) >= ac):
+            enemy.health -= (1 + damage)
+            self.gain_exp()
+            if(enemy.health <= 0):
+                enemy.is_alive = False
+            return True
+            
+        else:
+            return False
