@@ -13,28 +13,28 @@ class Character():
         self.ac = 10
         self.exp = 0
         self.level = 1
-        self.health = 5 + self.modifiers('con')
+        self.health = 5
         self.abilities = ['dex', 'str', 'con', 'wis', 'int', 'chr']
 
     def modifiers(self, ability):
         return(getattr(self, ability) - 10 ) // 2
 
     ## Attack, checks the dice_roll against the enemy's AC. Sets to dead if health is equal to or lower than 0
-    def attack(self, dice_roll, enemy):
+    def attack(self, dice_roll, enemy, base_damage = 1, crit = 2, mod = 'str'):
         ac = (enemy.ac + enemy.modifiers('dex'))
-        damage = self.modifiers('str') + (self.level // 2)
+        damage = self.modifiers(mod) + (self.level // 2)
         to_hit = damage
         if(damage < 0):
             damage = 0
         if(dice_roll == 20):
-            enemy.health -= (2 + (damage * 2))
+            enemy.health -= (base_damage * 2 + (damage * crit))
             self.gain_exp()
             if(enemy.health <= 0):
                 enemy.is_alive = False
             return True
 
         if((dice_roll + to_hit) >= ac):
-            enemy.health -= (1 + damage)
+            enemy.health -= (base_damage + damage)
             self.gain_exp()
             if(enemy.health <= 0):
                 enemy.is_alive = False
@@ -66,7 +66,7 @@ class Fighter(Character):
     def __init__(self, name, alignment):
         Character.__init__(self, name, alignment)
         
-    def attack(self, dice_roll, enemy):
+    def attack(self, dice_roll, enemy, base_damage = ):
         ac = (enemy.ac + enemy.modifiers('dex'))
         damage = self.modifiers('str') + (self.level // 2)
         to_hit = damage + self.level
