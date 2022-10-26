@@ -1,8 +1,8 @@
 ## Test Driven Developement
 
 ### Using the evercraft documentation create Tests 
-<!-- 
-1.) Create test to make sure the character exists by asserting the character is not equal to None
+
+1. ) Create test to make sure the character exists by asserting the character is not equal to None
 2.) Create Test for create name by asserting the name is not equal to None 
 3.) Create test for character name by setting the new name to a variable 
 3.A) variable name is now equal to the name of the character then asserting the character name is not equal to None
@@ -17,4 +17,35 @@
 7. A) Can a character damage another characeter and change the health by 1
 7. B) Can a character damage another character with a critical hit and do more damage
 7. C) Can a character damage another player  
--->
+
+
+## Refactored PseudoCode
+## when creating Character in all test's must be referenced with Character('name', 'alignment')
+<!-- 
+1.) inside the def __init__ (self, name, alignment)
+1.B) set self(name, alignment, ac, health, is_alive, dex, str, wis, chr, con, int and atribute)
+2.) test case assert that Character() does not equal None 
+3.) test case assert that Character name does not equal None
+4.) Test case assert name == custom name for two custom Characters ( 1 & 2)
+5.) Test case set name to Character1.name / set Character.name to new custom name assert that Character.name does not equal "name'
+6.) Test case assert that Character alignment does not equal None
+7.) Test case assert that Character ac does not equal None
+8.) test case create Character then add to Chacter.ac then assert that Character.ac does not equal base Character.ac 
+9.) Test case assert that Character.health does not equal None
+9.) Test case create two unique Characters then assert that when the Dice_roll is above the ac the targeted Character hit equal True
+10.) Test case create two unique Charatcers then assert that when the Dice_roll is below the ac of the targeted Character hit equals false 
+11.) Test case create two unique Characters then assert that when Dice_roll is above targeted Character.ac then the targeted chacter.health does not equal full health (5)
+12.) Test case does the same thing as the attack_hit but if Dice_roll === 20 then assert that health equals 3
+13.) Test case when Character is attacked and health = 0 the assert that character.is_alive == flase
+14.) Test case Create Character and assert that character.dex == 10
+15.) Test case to check for the Modifiers / create Character 'Sims mcBirdman'
+15.A) Sims McBirdman.dex == 14 assert Sims McBirdman.modifiers == 2
+15.B) Sims McBirdman.dex == 19 assert Sims McBirdman.modifiers == 4
+16.) Test case to check for negative Modifiers / create Character 'Afda'
+16.A) Afda.dex == 7 assert Afda.modifiers == -2
+16.B) Afda.dex == 4 assert Afda.Modifiers == -3
+16.C) Afda.dex == 3 assert Afda.Modifiers == -5
+
+ -->
+
+ ## Iteration 2

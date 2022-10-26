@@ -35,7 +35,7 @@ def test_character_ac_change():
     sims.ac = sims.ac + 2
     assert sims.ac is 12
 
-def test_character_health():
+def test_character_health_ex():
     sims = Character('Sims McBirdman', "Chaotic Neutral")
     assert sims.health == 5
 
@@ -103,4 +103,104 @@ def test_character_modifiers_negative3():
 
 def test_character_adding_attribute():
     sims = Character('Sims McBirdman', "Chaotic Neutral")
-    
+    rat = Character('rat', 'Chaotic Evil')
+    sims.str = 15
+    sims.attack(15, rat)
+    assert rat.health == 2
+
+def test_character_attack_minus():
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    rat = Character('rat', 'Chaotic Evil')
+    rat.str = 7
+    rat.attack(15, sims)
+    assert sims.health == 4
+
+def test_character_attack_critical_modifier():
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    rat = Character('rat', 'Chaotic Evil')
+    sims.str = 16
+    sims.attack(20, rat)
+    assert rat.is_alive is not True
+
+def test_character_critical_attack_modifier_negative():
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    rat = Character('rat', 'Chaotic Evil')
+    rat.str = 5
+    rat.attack(20, sims)
+    assert sims.health == 3
+
+def test_character_attack_modifier_two():
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    rat = Character('rat', 'Chaotic Evil')
+    sims.str = 17
+    sims.attack(7, rat)
+    assert rat.health == 1
+
+def test_character_ac_added():
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    rat = Character('rat', 'Chaotic Evil')
+    sims.dex = 17
+    assert not rat.attack(12, sims)
+
+def test_character_ac():
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    rat = Character('rat', 'Chaotic Evil')
+    rat.dex = 1
+    assert sims.attack(5, rat)
+
+def test_character_health():
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    rat = Character('rat', 'Chaotic Evil') 
+    sims.con = 13
+    sims.update_character()
+    assert not sims.health == 5
+
+def test_character_exp_exists():
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    rat = Character('rat', 'Chaotic Evil') 
+    assert sims.exp is not None
+
+def test_character_gain_exp():
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    rat = Character('rat', 'Chaotic Evil')
+    sims.attack(11 , rat)
+    assert sims.exp == 10
+
+def test_character_level_exits():
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    assert sims.level is not None
+
+def test_character_level_up():
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    rat = Character('rat', 'Chaotic Evil')
+    sims.exp = 990
+    sims.attack(12, rat)
+    assert sims.level == 2
+
+def test_character_hit_no_level():
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    rat = Character('rat', 'Chaotic Evil')
+    sims.exp = 980
+    sims.attack(12, rat)
+    assert sims.level == 1
+
+def test_character_hit_increases():
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    rat = Character('rat', 'Chaotic Evil')
+    sims.exp = 990
+    sims.attack(12, rat)
+    assert sims.health != 5
+
+def test_character_damage_increase():
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    rat = Character('rat', 'Chaotic Evil')
+    sims.level = 2
+    sims.attack(10, rat)
+    assert rat.health == 3
+
+def test_character_odd_level():
+    sims = Character('Sims McBirdman', "Chaotic Neutral")
+    rat = Character('rat', 'Chaotic Evil')
+    sims.level = 5
+    sims.attack(10, rat)
+    assert rat.health == 2
