@@ -20,21 +20,21 @@ class Character():
         return(getattr(self, ability) - 10 ) // 2
 
     ## Attack, checks the dice_roll against the enemy's AC. Sets to dead if health is equal to or lower than 0
-    def attack(self, dice_roll, enemy, base_damage = 1, crit = 2, mod = 'str'):
+    def attack(self, dice_roll, enemy):
         ac = (enemy.ac + enemy.modifiers('dex'))
-        damage = self.modifiers(mod) + (self.level // 2)
+        damage = self.modifiers('str') + (self.level // 2)
         to_hit = damage
         if(damage < 0):
             damage = 0
         if(dice_roll == 20):
-            enemy.health -= (base_damage * 2 + (damage * crit))
+            enemy.health -= (2 + (damage * 2))
             self.gain_exp()
             if(enemy.health <= 0):
                 enemy.is_alive = False
             return True
 
         if((dice_roll + to_hit) >= ac):
-            enemy.health -= (base_damage + damage)
+            enemy.health -= (1 + damage)
             self.gain_exp()
             if(enemy.health <= 0):
                 enemy.is_alive = False
@@ -63,10 +63,8 @@ class Character():
 
 
 class Fighter(Character):
-    def __init__(self, name, alignment):
-        Character.__init__(self, name, alignment)
-        
-    def attack(self, dice_roll, enemy, base_damage = ):
+    
+    def attack(self, dice_roll, enemy):
         ac = (enemy.ac + enemy.modifiers('dex'))
         damage = self.modifiers('str') + (self.level // 2)
         to_hit = damage + self.level
@@ -98,6 +96,7 @@ class Fighter(Character):
 
 
 class Rogue(Character):
+    
     def __init__(self, name, alignment):
         if alignment == 'good' or alignment == 'Good':
             alignment = 'neutral' 
@@ -127,9 +126,81 @@ class Rogue(Character):
             return False
 
 class Monk(Character):
-    def __init__(self, name, alignment):
-        Character.__init__(self, name, alignment)
-
+    
     def update_character(self):
-        self.ac = self.wis + self.modifiers('wis')
-        self.health = self.con + self.modifiers('con')
+        if(self.wis > 11):
+            self.ac = self.ac + self.modifiers('wis')
+        self.health = self.health + self.modifiers('con')
+    
+    def level_up(self):
+        self.level += 1
+        if(self.con > 11):
+            self.health += 6 + self.con
+        else:
+            self.health += 6
+
+    def attack(self, dice_roll, enemy):
+        ac = (enemy.ac + enemy.modifiers('dex'))
+        damage = self.modifiers('str') + (self.level // 2)
+        to_hit_mod2 = self.level // 2
+        to_hit_mod3 = self.level // 3
+        to_hit = damage + to_hit_mod2 + to_hit_mod3
+        if(damage < 0):
+            damage = 0
+        if(dice_roll == 20):
+            enemy.health -= (6 + (damage * 2))
+            self.gain_exp()
+            if(enemy.health <= 0):
+                enemy.is_alive = False
+            return True
+
+        if((dice_roll + to_hit) >= ac):
+            enemy.health -= (3 + damage)
+            self.gain_exp()
+            if(enemy.health <= 0):
+                enemy.is_alive = False
+            return True
+            
+        else:
+            return False
+
+class Paladin(Character):
+    def __init__(self, name, alignment):
+        Character.__init__(self, name, 'Good')
+
+    def level_up(self):
+        self.level += 1
+        if (self.con > 11):
+            self.health += 8 + self.modifiers('con')
+        else:
+            self.health += 8
+
+    def attack(self, dice_roll, enemy):
+        ac = (enemy.ac + enemy.modifiers('dex'))
+        smite = 0
+        if(enemy.alignment.__contains__('Evil') or enemy.alignment.__contains__('evil')):
+            smite = 2
+        damage = self.modifiers('str') + (self.level // 2) + smite
+        to_hit = damage + (self.level // 2)
+        if(damage < 0):
+            damage = 0
+        if(dice_roll == 20):
+            enemy.health -= (2 + (damage * 3))
+            self.gain_exp()
+            if(enemy.health <= 0):
+                enemy.is_alive = False
+            return True
+
+        if((dice_roll + to_hit) >= ac):
+            enemy.health -= (1 + damage)
+            self.gain_exp()
+            if(enemy.health <= 0):
+                enemy.is_alive = False
+            return True
+            
+        else:
+            return False
+
+
+
+

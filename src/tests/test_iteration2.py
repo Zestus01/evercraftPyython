@@ -106,13 +106,15 @@ def test_monk_wis_ac_positive():
     buddha = Monk('Buddha', 'Neutral')
     rat = Character('rat', 'Chaotic Evil')
     buddha.wis = 14
-    assert rat.attack(11, buddha)
+    buddha.update_character()
+    assert not rat.attack(11, buddha)
 
 def test_monk_wis_ac_negative():
     buddha = Monk('Buddha', 'Neutral')
     rat = Character('rat', 'Chaotic Evil')
     buddha.wis = 8
-    assert rat.attack(11, buddha)
+    buddha.update_character()
+    assert buddha.ac == 10
 
 def test_monk_gain_6_health_level():
     buddha = Monk('Buddha', 'Neutral')
@@ -120,3 +122,77 @@ def test_monk_gain_6_health_level():
     buddha.exp = 990
     buddha.attack(15, rat)
     assert buddha.health == 11
+
+def test_monk_extra_damage():
+    buddha = Monk('Buddha', 'Neutral')
+    rat = Character('rat', 'Chaotic Evil')
+    buddha.attack(14, rat)
+    assert rat.health == 2
+
+def test_monk_crit_hit():
+    buddha = Monk('Buddha', 'Neutral')
+    rat = Character('rat', 'Chaotic Evil')
+    buddha.attack(20, rat)
+    assert rat.is_alive == False
+
+def test_monk_to_hit_2_level():
+    buddha = Monk('Buddha', 'Neutral')
+    rat = Character('rat', 'Chaotic Evil')
+    buddha.level = 2
+    assert buddha.attack(9, rat)
+    
+def test_monk_to_hit_3_level():
+    buddha = Monk('Buddha', 'Neutral')
+    rat = Character('rat', 'Chaotic Evil')
+    buddha.level = 3
+    assert buddha.attack(8, rat)
+
+def test_monk_to_hit_6_level():
+    buddha = Monk('Buddha', 'Neutral')
+    rat = Character('rat', 'Chaotic Evil')
+    buddha.level = 6
+    assert buddha.attack(5, rat)
+
+def test_paladin_exists():
+    jesus = Paladin('Jesus', 'Good')
+    assert jesus is not None
+
+def test_paladin_is_good():
+    lucifer = Paladin('Lucifer', 'Evil')
+    assert lucifer.alignment != 'Evil'
+
+def test_paladin_8_health():
+    jesus = Paladin('Jesus', 'Good')
+    rat = Character('rat', 'Chaotic Evil')
+    jesus.exp = 990
+    jesus.attack(13, rat)
+    assert jesus.health == 13
+
+def test_paladin_extra_damage_evil():
+    jesus = Paladin('Jesus', 'Good')
+    rat = Character('rat', 'Lawfull evil')
+    jesus.attack(14, rat)
+    assert rat.health == 2
+
+def test_paladin_extra_damage_not_evil():
+    jesus = Paladin('Jesus', 'Good')
+    rat = Character('rat', 'Chaotic')
+    jesus.attack(14, rat)
+    assert rat.health == 4
+
+def test_paladin_smite_evil():
+    jesus = Paladin('Jesus', 'Good')
+    rat = Character('rat', 'Chaotic Evil')
+    jesus.attack(20, rat)
+    assert not rat.is_alive
+
+def test_paladin_to_hit_plus1():
+    jesus = Paladin('Jesus', 'Good')
+    rat = Character('rat', 'Chaotic')
+    jesus.level_up()
+    assert jesus.attack(8, rat)
+
+def test_paladin_smite_evil_on_miss():
+    jesus = Paladin('Jesus', 'Good')
+    rat = Character('rat', 'Chaotic Evil')
+    assert jesus.attack(8, rat)
