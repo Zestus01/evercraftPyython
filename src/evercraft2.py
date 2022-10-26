@@ -58,14 +58,18 @@ class Character():
         else:
             self.health += 5
 
+
+# Iteration 2 bellow here
+
+
 class Fighter(Character):
     def __init__(self, name, alignment):
         Character.__init__(self, name, alignment)
         
     def attack(self, dice_roll, enemy):
         ac = (enemy.ac + enemy.modifiers('dex'))
-        damage = self.modifiers('str') + (self.level)
-        to_hit = damage
+        damage = self.modifiers('str') + (self.level // 2)
+        to_hit = damage + self.level
         if(damage < 0):
             damage = 0
         if(dice_roll == 20):
@@ -84,3 +88,48 @@ class Fighter(Character):
             
         else:
             return False
+    
+    def level_up(self):
+        self.level += 1
+        if(self.con >= 10):
+            self.health += 10 + self.modifiers('con')
+        else:
+            self.health += 10
+
+
+class Rogue(Character):
+    def __init__(self, name, alignment):
+        if alignment == 'good' or alignment == 'Good':
+            alignment = 'neutral' 
+        Character.__init__(self, name, alignment)
+
+    def attack(self, dice_roll, enemy):
+        ac = enemy.ac 
+        damage = self.modifiers('dex') + (self.level // 2)
+        to_hit = damage
+        if(damage < 0):
+            damage = 0
+        if(dice_roll == 20):
+            enemy.health -= (2 + (damage * 3))
+            self.gain_exp()
+            if(enemy.health <= 0):
+                enemy.is_alive = False
+            return True
+
+        if((dice_roll + to_hit) >= ac):
+            enemy.health -= (1 + damage)
+            self.gain_exp()
+            if(enemy.health <= 0):
+                enemy.is_alive = False
+            return True
+            
+        else:
+            return False
+
+class Monk(Character):
+    def __init__(self, name, alignment):
+        Character.__init__(self, name, alignment)
+
+    def update_character(self):
+        self.ac = self.wis + self.modifiers('wis')
+        self.health = self.con + self.modifiers('con')
