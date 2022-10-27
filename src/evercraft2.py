@@ -32,6 +32,7 @@ class Character(Race):
     def to_hit_bonus(self):
         return self.level // 2
 
+    ## Force commit
     ## Attack, checks the dice_roll against the enemy's AC. Sets to dead if health is equal to or lower than 0
     def attack(self, dice_roll, enemy):
         ac = enemy.ac + (enemy.modifiers('dex') if not self.ignore_dex else 0)
