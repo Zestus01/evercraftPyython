@@ -172,13 +172,13 @@ def test_paladin_extra_damage_evil():
     jesus = Paladin('Jesus', 'Good')
     rat = Character('rat', 'Lawfull evil')
     jesus.attack(14, rat)
-    assert rat.health == 2
+    assert rat.health == 1
 
 def test_paladin_extra_damage_not_evil():
     jesus = Paladin('Jesus', 'Good')
     rat = Character('rat', 'Chaotic')
     jesus.attack(14, rat)
-    assert rat.health == 4
+    assert rat.health == 3
 
 def test_paladin_smite_evil():
     jesus = Paladin('Jesus', 'Good')
