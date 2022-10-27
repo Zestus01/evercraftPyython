@@ -21,6 +21,18 @@ def test_character_can_equip_weapon_two():
     josh.equip_weapon('longsword')
     assert josh.damage == 5
 
+def test_character_can_un_equip_weapon_two():
+    josh = Fighter('Josh', 'chaotic Neutral')
+    josh.equip_weapon('longsword')
+    josh.unequip_weapon('longsword')
+    assert josh.equiped_weapon == ''
+
+def test_character_can_un_equip_weapon():
+    josh = Fighter('Josh', 'chaotic Neutral')
+    josh.equip_weapon('longsword')
+    josh.unequip_weapon('longsword')
+    assert josh.damage == 1
+
 def test_character_can_equip_weapon():
     josh = Fighter('Josh', 'chaotic Neutral')
     josh.equip_weapon('longsword')
@@ -47,6 +59,16 @@ def test_unequip_weapon():
     josh.equip_weapon('elven_longsword')
     assert josh.equiped_weapon is 'elven_longsword'
 
+def test_daniel_done_with_evercraft():
+    daniel = Rogue('Daniel', 'Chaotic', 'halfling')
+    daniel.__setattr__('is_done_with_evercraft', True)
+    assert daniel.is_done_with_evercraft
+
+def test_estus_done_with_evercraft():
+    estus = Monk('Estus', 'Chaotic', 'dwarf')
+    estus.__setattr__('is_done_with_evercraft', True)
+    assert estus.is_done_with_evercraft
+    
 
 # def test_armor_can_be_equiped():
 #     josh = Character('Josh', 'chaotic Neutral')

@@ -13,8 +13,28 @@ class Equipment():
     def get_item(self, dictionary, item):
         return dictionary[item]
 
+class Dice():
+    twenty = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+    twelve = [1,2,3,4,5,6,7,8,9,10,11,12]
+    eight = [1,2,3,4,5,6,7,8]
+    six = [1,2,3,4,5,6]
+    four = [1,2,3,4]
 
-class Character(Equipment):
+    def roll_dice(self, die):
+        if die == 20:
+            roll = random.choice(twenty)
+        elif die == 12:
+            roll = random.choice(twelve)
+        elif die == 8:
+            roll = random.choice(eight)
+        elif die == 6:
+            roll = random.choice(six)
+        elif die == 4:
+            roll = random.choice(four)
+        elif die == 1:
+            roll == 20
+
+class Character(Equipment, Dice):
 
     def __init__(self, name, alignment, race = 'human'):
         self.name = name
@@ -46,9 +66,9 @@ class Character(Equipment):
         self.klass = 'thing'
         if(self.race != 'human'):
             self.race_update()
-    
 
-    
+
+
     def equip_armor(self, armor):
         if(self.equiped_armor):
             self.unequip_armor(self.equiped_armor)
@@ -62,9 +82,7 @@ class Character(Equipment):
     def unequip_armor(self, armor):
         for attr in self.armor_list[armor]:
             self.__setattr__(attr, self.__getattribute__(attr) - self.armor_list[armor][attr])
-
-
-
+        self.equiped_armor = ''
 
 
     def equip_weapon(self, equip):
@@ -79,7 +97,8 @@ class Character(Equipment):
 
     def unequip_weapon(self, equip):
         for attr in self.weapon_list[equip]:
-            self.__setattr__(attr, self.__getattribute__(attr) - self.weapon_list[equip][attr])        
+            self.__setattr__(attr, self.__getattribute__(attr) - self.weapon_list[equip][attr])
+        self.equiped_weapon = ''            
 
     def race_update(self):
         if(self.race == 'orc'):
@@ -185,8 +204,8 @@ class Character(Equipment):
 
 
 class Fighter(Character):
-    def __init__(self, name, alignment):
-        super().__init__(self, name, alignment)
+    def __init__(self, name, alignment, race = 'human'):
+        super().__init__(name, alignment, race)
         self.health_increase = 10
         self.klass = 'fighter'
     
@@ -195,8 +214,8 @@ class Fighter(Character):
 
 class Rogue(Character):
     
-    def __init__(self, name, alignment):
-        super().__init__(self, name, alignment)
+    def __init__(self, name, alignment, race = 'human'):
+        super().__init__(name, alignment, race)
         self.damage_mod = 'dex'
         self.crit_mult = self.crit_mult + 1
         self.ignore_dex = True
@@ -206,8 +225,8 @@ class Rogue(Character):
         self.klass = 'rogue'
 
 class Monk(Character):
-    def __init__(self, name, alignment):
-        super().__init__(self, name, alignment)
+    def __init__(self, name, alignment, race = 'human'):
+        super().__init__(name, alignment, race)
         self.damage = 3
         if(self.wis > 11):
             self.ac = self.ac + self.modifiers('wis')
@@ -226,8 +245,8 @@ class Monk(Character):
         self.health = self.health + self.modifiers('con')
 
 class Paladin(Character):
-    def __init__(self, name, alignment):
-        super().__init__(self, name, 'Good')
+    def __init__(self, name, alignment, race = 'human'):
+        super().__init__(name, 'Good', race)
         self.health_increase = 8
         self.is_pally = True
         self.klass = 'paladin'
