@@ -13,6 +13,10 @@ def test_fighter_knows_modifier():
     fighter = Fighter('john', 'good')
     fighter.str = 14
     assert fighter.modifiers('str') == 2
+
+def test_fighter_klass():
+    fighter = Fighter('john', 'good')
+    assert fighter.klass == 'fighter'
     
 def test_fighter_extra_to_hit():
     billy = Fighter('Billy Joe Bob', "Chaotic Neutral")
@@ -41,6 +45,10 @@ def test_fighter_gain_10_hp_on_level():
 def test_rogue_exists():
     sneaky = Rogue('Sneaky', 'Evil')
     assert sneaky is not None
+
+def test_rogue_klass_attribute():
+    sneaky = Rogue('Sneaky', 'Evil')
+    assert sneaky.klass == 'rogue'
 
 def test_rogue_not_good():
     sneaky = Rogue('Sneaky', 'Good')
@@ -102,6 +110,14 @@ def test_monk_exists():
     buddha = Monk('Buddha', 'Neutral')
     assert buddha is not None
 
+def test_monk_klass():
+    buddha = Monk('Buddha', 'Neutral')
+    assert buddha.klass is not 'thing'
+
+def test_monk_klass_two():
+    buddha = Monk('Buddha', 'Neutral')
+    assert buddha.klass is 'monk'
+
 def test_monk_wis_ac_positive():
     buddha = Monk('Buddha', 'Neutral')
     rat = Character('rat', 'Chaotic Evil')
@@ -157,9 +173,14 @@ def test_paladin_exists():
     jesus = Paladin('Jesus', 'Good')
     assert jesus is not None
 
+def test_paladin_exists():
+    jesus = Paladin('Jesus', 'Good')
+    assert jesus.klass is 'paladin'   
+
 def test_paladin_is_good():
     lucifer = Paladin('Lucifer', 'Evil')
     assert lucifer.alignment != 'Evil'
+
 
 def test_paladin_8_health():
     jesus = Paladin('Jesus', 'Good')
@@ -169,7 +190,7 @@ def test_paladin_8_health():
     assert jesus.health == 13
 
 def test_paladin_extra_damage_evil():
-    jesus = Paladin('Jesus', 'Good')
+    jesus = Paladin('Jesus', 'Good')    
     rat = Character('rat', 'Lawful evil')
     jesus.attack(14, rat)
     assert rat.health == 1

@@ -50,8 +50,3 @@ class Character(dict):
 
     def __str__(self):
         return f"Hello my name is {self.name} and I will attack you"
-
-characer1 = Character()
-characer1.create("Dakota", "evil")
-
-print(characer1)

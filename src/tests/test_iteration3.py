@@ -34,6 +34,12 @@ def test_race_dwarf_con_level():
     gimli.level_up()
     assert gimli.health == 12
 
+def test_race_dwarf_con_level_two():
+    gimli = Character('Gimli', 'Lawful Good', 'dwarf')
+    gimli.con = 16
+    gimli.level_up()
+    assert gimli.health == 16
+
 def test_dwarf_hurt_orc():
     gimli = Character('Gimli', 'Lawful Good', 'dwarf')
     josh = Character('josh', 'Chaotic Neutral', 'orc')
@@ -44,6 +50,10 @@ def test_dwarf_hurt_orc_two():
     gimli = Character('Gimli', 'Lawful Good', 'dwarf')
     josh = Character('josh', 'Chaotic Neutral', 'orc')
     assert gimli.attack(10, josh)
+
+def test_elf_con_mod():
+    estus = Character('estus', 'Chaotic Neutral', 'elf') 
+    assert estus.modifiers('con') == -1
 
 def test_elf_crit_range():
     estus = Character('estus', 'Chaotic Neutral', 'elf')   

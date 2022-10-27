@@ -41,7 +41,7 @@ def test_character_health_ex():
 
 def test_character_attack_hit():
     sims = Character('Sims McBirdman', "Chaotic Neutral")
-    rat = Character('rat', 'Chaotic Evil')
+    rat = Character('rat', 'Chaotic Evil', 'rat')
     assert sims.attack(12, rat) == True
 
 def test_character_attack_miss():
