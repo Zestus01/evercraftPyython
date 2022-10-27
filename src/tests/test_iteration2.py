@@ -9,7 +9,7 @@ def test_fighter_check_name():
     fighter = Fighter('john', 'good')
     assert fighter.name != None
 
-def test_fighter_knows_modifer():
+def test_fighter_knows_modifier():
     fighter = Fighter('john', 'good')
     fighter.str = 14
     assert fighter.modifiers('str') == 2
@@ -170,7 +170,7 @@ def test_paladin_8_health():
 
 def test_paladin_extra_damage_evil():
     jesus = Paladin('Jesus', 'Good')
-    rat = Character('rat', 'Lawfull evil')
+    rat = Character('rat', 'Lawful evil')
     jesus.attack(14, rat)
     assert rat.health == 1
 

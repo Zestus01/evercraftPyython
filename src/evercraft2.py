@@ -1,6 +1,6 @@
-class Character():
+class Character(Race):
 
-    def __init__(self, name, alignment):
+    def __init__(self, name, alignment, race = 'human'):
         self.name = name
         self.alignment = alignment
         self.is_alive = True
@@ -21,27 +21,34 @@ class Character():
         self.ignore_dex = False
         self.abilities = ['dex', 'str', 'con', 'wis', 'int', 'chr']
         self.is_pally = False
-
+        self.crit_range = 20
+        self.race = race
+        self.race_update(self, race)
+    
+    ## Gets the ability score and does the math to calculate the bonus
     def modifiers(self, ability):
         return(getattr(self, ability) - 10 ) // 2
-
+    ## Helper function to calculate hit chance
     def to_hit_bonus(self):
         return self.level // 2
-    
 
     ## Attack, checks the dice_roll against the enemy's AC. Sets to dead if health is equal to or lower than 0
     def attack(self, dice_roll, enemy):
         ac = enemy.ac + (enemy.modifiers('dex') if not self.ignore_dex else 0)
         smite = 0
+        ## If paladin I need to smite evil
         if(self.is_pally):
             if(enemy.alignment.__contains__('Evil') or enemy.alignment.__contains__('evil')):
                 smite = 2
                 self.crit_mult = 3
+        ## Damage is increased by stat associated modifier and hit bonus
         damage = self.modifiers(self.damage_mod) + (self.to_hit_bonus()) + smite
-        to_hit = damage 
+        to_hit = damage
+        ## If the extra damage will take away it resets to 0 
         if(damage < 0):
             damage = 0
-        if(dice_roll == 20):
+        ## Critical Hit
+        if(dice_roll >= self.crit_range):
             enemy.health -= (self.damage * 2 + (damage * self.crit_mult))
             self.crit_mult = 2
             self.gain_exp()
@@ -128,34 +135,18 @@ class Paladin(Character):
     def to_hit_bonus(self):
         return self.level
 
-    # def attack(self, dice_roll, enemy):
-    #     ac = (enemy.ac + enemy.modifiers('dex'))
-    #     smite = 0
-    #     if(enemy.alignment.__contains__('Evil') or enemy.alignment.__contains__('evil')):
-    #         smite = 2
-    #     damage = self.modifiers('str') + (self.level // 2) + smite
-    #     to_hit = damage + (self.level // 2)
-    #     if(damage < 0):
-    #         damage = 0 
-    #     if(dice_roll == 20):
-    #         enemy.health -= (2 + (damage * 3))
-    #         self.gain_exp()
-    #         if(enemy.health <= 0):
-    #             enemy.is_alive = False
-    #         return True
 
-    #     if((dice_roll + to_hit) >= ac):
-    #         enemy.health -= (1 + damage)
-    #         self.gain_exp()
-    #         if(enemy.health <= 0):
-    #             enemy.is_alive = False
-    #         return True
-            
-    #     else:
-    #         return False
 
 # start of Iteration 3 bellow
-
-
+class Race ():
+    ## char stands for character
+    def race_update(self, char, race):
+        if(race == 'orc'):
+            char.str += 4
+            char.int -= 2
+            char.chr -= 2
+            char.wis -= 2
+            char.ac += 2
+        
 
 
