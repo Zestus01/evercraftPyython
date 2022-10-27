@@ -9,6 +9,7 @@
     "python.defaultInterpreterPath": "/workspace/.venv/python/bin/python",
     "cSpell.words": [
         "evercraft",
+        "gimli",
         "mult"
     ]
 }

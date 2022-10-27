@@ -1,4 +1,10 @@
-class Character(Race):
+class Equipment():
+    armor = dict()
+    weapon = dict()
+
+
+
+class Character(Equipment):
 
     def __init__(self, name, alignment, race = 'human'):
         self.name = name
@@ -23,8 +29,42 @@ class Character(Race):
         self.is_pally = False
         self.crit_range = 20
         self.race = race
-        self.race_update(self, race)
+        self.race_health = 1
+        if(self.race is not 'human'):
+            self.race_update()
     
+    def equip_armor(self, armor):
+        pass
+
+    def equip_weapon(self, weapon):
+        pass
+
+    def race_update(self):
+        if(self.race == 'orc'):
+            self.str += 4
+            self.int -= 2
+            self.chr -= 2
+            self.wis -= 2
+            self.ac += 2
+
+        elif(self.race == 'dwarf'):
+            self.con += 2
+            self.chr -= 2
+            self.race_health = 2
+
+        elif(self.race == 'elf'):
+            self.dex += 2
+            self.con -= 2
+            self.crit_range = 19
+
+        elif(self.race == 'halfling'):
+            self.dex += 2
+            self.str -= 2
+            if(self.alignment.__contains__('evil') or self.alignment.__contains__('Evil')):
+                self.alignment = self.alignment.replace('evil', 'neutral')
+                self.alignment = self.alignment.replace('Evil', "Neutral")
+
+
     ## Gets the ability score and does the math to calculate the bonus
     def modifiers(self, ability):
         return(getattr(self, ability) - 10 ) // 2
@@ -37,17 +77,34 @@ class Character(Race):
     def attack(self, dice_roll, enemy):
         ac = enemy.ac + (enemy.modifiers('dex') if not self.ignore_dex else 0)
         smite = 0
+        race_mod = 0
+        
         ## If paladin I need to smite evil
         if(self.is_pally):
             if(enemy.alignment.__contains__('Evil') or enemy.alignment.__contains__('evil')):
                 smite = 2
                 self.crit_mult = 3
+
+        ##Race based attacking
+        if(self.race == 'orc' and enemy.race == 'elf'):
+            ac += 2
+
+        ##Halfing on Halfing violence is a problem we need to stop 
+        if(self.race != 'halfling' and enemy.race == 'halfling'):
+            ac += 2
+
+        ##checking race damage against orc from dwarfs
+        if(self.race == 'dwarf'):
+            if(enemy.race == 'orc'):
+                race_mod = 2
+
         ## Damage is increased by stat associated modifier and hit bonus
-        damage = self.modifiers(self.damage_mod) + (self.to_hit_bonus()) + smite
+        damage = self.modifiers(self.damage_mod) + (self.to_hit_bonus()) + smite + race_mod
         to_hit = damage
         ## If the extra damage will take away it resets to 0 
         if(damage < 0):
             damage = 0
+
         ## Critical Hit
         if(dice_roll >= self.crit_range):
             enemy.health -= (self.damage * 2 + (damage * self.crit_mult))
@@ -78,7 +135,7 @@ class Character(Race):
     def level_up(self):
         self.level += 1
         if(self.con >= 10):
-            self.health += self.health_increase + self.modifiers('con')
+            self.health += self.health_increase + (self.modifiers('con') * self.race_health)
         else:
             self.health += self.health_increase
 
@@ -88,7 +145,7 @@ class Character(Race):
 
 class Fighter(Character):
     def __init__(self, name, alignment):
-        Character.__init__(self, name, alignment)
+        super().__init__(self, name, alignment)
         self.health_increase = 10
     
     def to_hit_bonus(self):
@@ -99,16 +156,18 @@ class Fighter(Character):
 class Rogue(Character):
     
     def __init__(self, name, alignment):
-        if alignment == 'good' or alignment == 'Good':
-            alignment = 'neutral' 
-        Character.__init__(self, name, alignment)
+        super().__init__(self, name, alignment)
         self.damage_mod = 'dex'
-        self.crit_mult = 3
+        self.crit_mult = self.crit_mult + 1
         self.ignore_dex = True
+        if self.alignment.__contains__('good') or self.alignment.__contains__('Good'):
+            self.alignment = self.alignment.replace('Good', 'Neutral')
+            self.alignment = self.alignment.replace('good', 'neutral')
+
 
 class Monk(Character):
     def __init__(self, name, alignment):
-        Character.__init__(self, name, alignment)
+        super().__init__(self, name, alignment)
         self.damage = 3
         if(self.wis > 11):
             self.ac = self.ac + self.modifiers('wis')
@@ -129,25 +188,11 @@ class Monk(Character):
 
 class Paladin(Character):
     def __init__(self, name, alignment):
-        Character.__init__(self, name, 'Good')
+        super().__init__(self, name, 'Good')
         self.health_increase = 8
         self.is_pally = True
 
     def to_hit_bonus(self):
         return self.level
-
-
-
-# start of Iteration 3 bellow
-class Race ():
-    ## char stands for character
-    def race_update(self, char, race):
-        if(race == 'orc'):
-            char.str += 4
-            char.int -= 2
-            char.chr -= 2
-            char.wis -= 2
-            char.ac += 2
-        
 
 
