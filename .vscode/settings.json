@@ -8,6 +8,10 @@
     "python.terminal.activateEnvInCurrentTerminal": false,
     "python.defaultInterpreterPath": "/workspace/.venv/python/bin/python",
     "cSpell.words": [
-        "evercraft"
+        "elven",
+        "evercraft",
+        "gimli",
+        "mult",
+        "waraxe"
     ]
 }
