@@ -8,9 +8,17 @@ def test_race_change_to_elf():
     estus = Character('estus', 'Chaotic Neutral', 'elf')
     assert estus.race is 'elf'
 
+def test_race_change_with_class():
+    estus = Paladin('estus', 'Chaotic Neutral', 'elf')
+    assert estus.race == 'elf' and estus.klass is 'paladin'
+
 def test_race_can_be_orc():
     josh = Character('josh', 'Chaotic Neutral', 'orc')
     assert josh.str == 14
+
+def test_rogue_can_be_orc():
+    josh = Rogue('josh', 'Chaotic Neutral', 'orc')
+    assert josh.klass == 'rogue' and josh.race == 'orc'
 
 def test_race_orc_ac_bonus():
     josh = Character('josh', 'Chaotic Neutral', 'orc')
@@ -50,6 +58,11 @@ def test_dwarf_hurt_orc_two():
     gimli = Character('Gimli', 'Lawful Good', 'dwarf')
     josh = Character('josh', 'Chaotic Neutral', 'orc')
     assert gimli.attack(10, josh)
+
+def test_dwarf_not_get_bonus():
+    gimli = Character('Gimli', 'Lawful Good', 'dwarf')
+    josh = Character('josh', 'Chaotic Neutral', 'elf')
+    assert gimli.attack(11, josh)
 
 def test_elf_con_mod():
     estus = Character('estus', 'Chaotic Neutral', 'elf') 

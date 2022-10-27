@@ -1,3 +1,5 @@
+import random
+
 class Equipment():
     armor_list = {
     }
@@ -14,13 +16,13 @@ class Equipment():
         return dictionary[item]
 
 class Dice():
-    twenty = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
-    twelve = [1,2,3,4,5,6,7,8,9,10,11,12]
-    eight = [1,2,3,4,5,6,7,8]
-    six = [1,2,3,4,5,6]
-    four = [1,2,3,4]
-
     def roll_dice(self, die):
+        twenty = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+        twelve = [1,2,3,4,5,6,7,8,9,10,11,12]
+        eight = [1,2,3,4,5,6,7,8]
+        six = [1,2,3,4,5,6]
+        four = [1,2,3,4]
+        
         if die == 20:
             roll = random.choice(twenty)
         elif die == 12:
@@ -33,6 +35,7 @@ class Dice():
             roll = random.choice(four)
         elif die == 1:
             roll == 20
+        return roll
 
 class Character(Equipment, Dice):
 
@@ -101,6 +104,15 @@ class Character(Equipment, Dice):
         self.equiped_weapon = ''            
 
     def race_update(self):
+        if(self.race == 'chaos'):
+            self.str = self.roll_dice(20)
+            self.int = self.roll_dice(20)
+            self.dex = self.roll_dice(20)
+            self.wis = self.roll_dice(20)
+            self.chr = self.roll_dice(20)
+            self.con = self.roll_dice(20)
+            self.ac = 10 + self.modifiers('dex')
+            
         if(self.race == 'orc'):
             self.str += 4
             self.int -= 2
