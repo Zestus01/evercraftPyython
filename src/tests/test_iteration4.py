@@ -24,7 +24,7 @@ def test_character_can_equip_weapon_two():
 def test_character_can_un_equip_weapon_two():
     josh = Fighter('Josh', 'chaotic Neutral')
     josh.equip_weapon('longsword')
-    josh.unequip_weapon('longsword')
+    josh.unequip_weapon()
     assert josh.equiped_weapon == ''
 
 def test_character_can_un_equip_weapon_three():
@@ -36,7 +36,7 @@ def test_character_can_un_equip_weapon_three():
 def test_character_can_un_equip_weapon():
     josh = Fighter('Josh', 'chaotic Neutral')
     josh.equip_weapon('longsword')
-    josh.unequip_weapon('longsword')
+    josh.unequip_weapon()
     assert josh.damage == 1
 
 def test_rogue_quad_crit_damage():
@@ -86,8 +86,8 @@ def test_equip_weapon():
 def test_equip_weapon_race_target():
     legolas = Character('Legolas', 'Good', 'elf')
     legolas.equip_weapon('elven_longsword')
-    assert legolas.race_target is not None
-    assert legolas.race_wield is not None
+    assert legolas.race_target_weapon is not None
+    assert legolas.race_wield_weapon is not None
 
 def test_daniel_done_with_evercraft():
     daniel = Rogue('Daniel', 'Chaotic', 'halfling')
@@ -172,6 +172,12 @@ def test_nun_chucks_monk_bonus_miss():
     rat = Character('Rat', 'Chotic')
     rat.equip_weapon('nun_chucks')
     assert not rat.attack(13, estus)
+
+def Dungeon_of_darkness():
+    estus = Monk('Estus', 'Chaotic', 'dwarf')
+    daniel = Rogue('Daniel', 'Chaotic', 'halfling')
+    josh = Character('Josh', 'chaotic Neutral')
+    # dan_init
 
 
 
