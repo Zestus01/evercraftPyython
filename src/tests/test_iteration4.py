@@ -173,11 +173,47 @@ def test_nun_chucks_monk_bonus_miss():
     rat.equip_weapon('nun_chucks')
     assert not rat.attack(13, estus)
 
-def Dungeon_of_darkness():
+def test_dungeon_of_darkness():
     estus = Monk('Estus', 'Chaotic', 'dwarf')
     daniel = Rogue('Daniel', 'Chaotic', 'halfling')
     josh = Character('Josh', 'chaotic Neutral')
-    # dan_init
+    dan_initiative = daniel.roll_dice(20)
+    estus_initiative = estus.roll_dice(20)
+    josh_initiative = josh.roll_dice(20)
+    party_death = False
+    initiatives = [dan_initiative, estus_initiative, josh_initiative]
+    initiatives.sort()
+    order = initiatives
+    while josh.is_alive == True:
+        for i in order:
+            if i == dan_initiative:
+                daniel.attack(daniel.roll_dice(20), josh)
+                if josh.is_alive == False:
+                    daniel.equip_weapon('source_code')
+                    break
+            if i == estus_initiative:
+                estus.attack(estus.roll_dice(20), josh)
+                if josh.is_alive ==False:
+                    estus.equip_weapon('source_code')
+                    break
+            if i == josh_initiative:
+                hit = josh.roll_dice(20)
+                if hit <= 10:
+                    josh.attack(josh.roll_dice(20), estus)
+                    if estus.is_alive == False:
+                        josh.equip_weapon('goblin_spear')
+                        party_death == True
+                if hit >= 11:
+                    josh.attack(josh.roll_dice(20), daniel)
+                    if daniel.is_alive == False:
+                        josh.equip_weapon('sword_of_stupidity')
+                        party_death == True
+            if party_death == True:
+                break
+    if estus.equiped_weapon == 'source_code' or daniel.equiped_weapon == 'source_code':
+        assert josh.is_alive == False
+    elif josh.equiped_weapon == 'goblin_spear' or josh.equiped_weapon == 'sword_of_stupidity':
+        assert party_death == True
 
 
 

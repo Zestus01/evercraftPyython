@@ -84,6 +84,20 @@ def test_elf_ac_bonus_orc():
     estus = Character('estus', 'Chaotic Neutral', 'elf')  
     assert not josh.attack(10, estus)
 
+def test_orc_pally_smite_damage():
+    josh = Paladin('josh', 'Chaotic Neutral', 'orc')
+    rat = Character('rat', 'Rat evil')
+    rat.health = 6
+    assert josh.attack(18, rat)
+    assert not rat.is_alive
+
+def test_orc_pally_smite_damage_nuke():
+    josh = Paladin('josh', 'Chaotic Neutral', 'orc')
+    rat = Character('rat', 'Rat evil')
+    rat.health = 17
+    assert josh.attack(20, rat)
+    assert not rat.is_alive
+
 def test_halfling_bonus_dex_mod():
     stimpy = Character('Stimpy', 'Good', 'halfling')
     assert stimpy.modifiers('dex') == 1
@@ -93,11 +107,21 @@ def test_halfling_not_evil():
     assert stimpy.alignment is not 'evil'
 
 def test_halfling_on_halfling_violence():
-    stimpy = Character('Stimpy', 'evil', 'halfling')
+    stimpy = Rogue('Stimpy', 'evil', 'halfling')
     frodo = Character('Frodo', 'Good', 'halfling')
-    assert stimpy.attack(13, frodo)
+    assert stimpy.attack(10, frodo)
 
 def test_halfling_bonus_ac():
     stimpy = Character('Stimpy', 'evil', 'halfling')
     rat = Character('Rat', 'Neutral')
-    assert not rat.attack(12, stimpy)
+    assert not rat.attack(13, stimpy)
+
+def test_halfling_rogue_bonus_attack():
+    stimpy = Rogue('Stimpy', 'evil', 'halfling')
+    rat = Character('Rat', 'Neutral')
+    rat.dex = 18
+    assert stimpy.race == 'halfling'
+    assert stimpy.klass == 'rogue'
+    assert stimpy.attack(9, rat)
+    assert rat.health == 3
+    assert stimpy.ac == 11

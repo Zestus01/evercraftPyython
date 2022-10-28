@@ -27,6 +27,15 @@ class Equipment():
         'nun_chucks': {'damage': 5, 
                         'klass': 'monk', 
                         'negative': -4},
+        'source_code': {'damage': 8,
+                        'crit_mult': +3,
+                        'crit_range': -2},
+        'goblin_spear':{'damage': 4,
+                        'crit_range': -1,
+                        'dex': 2},
+        'sword_of_stupidity':{'int': -4,
+                            'wis': -4,
+                            'crit_mult': + 4}                
     }
     misc_list = dict()
 
@@ -68,36 +77,40 @@ class Character(Equipment, Dice):
         self.exp = 0
         self.level = 1
         self.health = 5
-        self.damage = 1
-        self.crit_mult = 2
-        self.health_increase = 5
+        self.damage = 1 ## Base damage 1
+        self.crit_mult = 2 ## Helper variable for rogue, crit damage
+        self.health_increase = 5 ## Variable for health increase per level
         self.damage_mod = 'str'
-        self.ignore_dex = False
+        self.ignore_dex = False ## False for everyone but rogue 
         self.abilities = ['dex', 'str', 'con', 'wis', 'int', 'chr']
-        self.is_pally = False
+        self.is_pally = False ## False for everyone but paladin
         self.crit_range = 20
         self.race = race
         self.race_health_increase = 1
         self.weapon_bonus = 0
-        self.equiped_weapon = ''
-        self.equiped_armor = ''
+        self.equiped_weapon = '' ## Empty strings false equivilent
+        self.equiped_armor = '' 
         self.equiped_shield = ''
-        self.klass = ''
+        self.klass = 'thing'
         self.race_target_weapon = ''
         self.race_wield_weapon = ''
         self.damage_received = 0
         if(self.race != 'human'):
             self.race_update()
-    
 
     def equip_armor(self, armor):
+        ## If there already is an equiped weapon unequip it then continue
         if(self.equiped_armor):
             self.unequip_armor()
+            ## For each attribute
         for attr in self.armor_list[armor]:
+            ## If the attr shouldn't be added to the character
             if(attr == 'klass' or attr == 'race' or attr == 'negative'):
                 continue
+            ## To stop the attribute from being added to the character
             if(attr.__contains__('race_bonus')):
                 continue
+            ## Special case for race_wield and race_target
             if(attr.__contains__('race')):
                 self.__setattr__(attr, self.armor_list[armor][attr])
             else:
@@ -116,16 +129,19 @@ class Character(Equipment, Dice):
                 self.__setattr__(attr, self.__getattribute__(attr) - self.armor_list[armor][attr])
         self.equiped_armor = ''
 
-
     def equip_weapon(self, weapon):
+        ## If there already is an equiped weapon unequip it then continue
         if(self.equiped_weapon):
             self.unequip_weapon()
-        
+        ## For each attribute
         for attr in self.weapon_list[weapon]:
+            ## For the attributes that shouldn't be added to the character
             if(attr == 'klass' or attr == 'race' or attr == 'negative'):
                 continue
+            ## Same as above if statement
             if(attr.__contains__('race_bonus')):
                 continue
+            ## For the race_target, race_wield, don't cacanate the string
             if(attr.__contains__('race')):
                 self.__setattr__(attr, self.weapon_list[weapon][attr])
             else:    
@@ -133,11 +149,15 @@ class Character(Equipment, Dice):
         self.equiped_weapon = weapon  
 
     def unequip_weapon(self):
+        ## For each attribute of the weapon
         for attr in self.weapon_list[self.equiped_weapon]:
+            ## If the attr shouldn't be added to the character
             if(attr == 'klass' or attr == 'race' or attr == 'negative'):
                 continue
+            ## Broken up for readibility, as above if statement
             if(attr.__contains__('race_bonus')):
                 continue
+            ## For the race_target and race_wield
             if(attr.__contains__('race')):
                 self.__setattr__(attr, '')
             else: 
@@ -145,6 +165,7 @@ class Character(Equipment, Dice):
         self.equiped_weapon = ''            
 
     def race_update(self):
+        ## 100% of the time, random all the time
         if(self.race == 'chaos'):
             self.str = self.roll_dice(20)
             self.int = self.roll_dice(20)
@@ -177,6 +198,7 @@ class Character(Equipment, Dice):
             if(self.alignment.__contains__('evil') or self.alignment.__contains__('Evil')):
                 self.alignment = self.alignment.replace('evil', 'neutral')
                 self.alignment = self.alignment.replace('Evil', "Neutral")
+        ## Updates the AC and health from race bonus
         self.update_character()
 
     ## Gets the ability score and does the math to calculate the bonus
@@ -253,7 +275,7 @@ class Character(Equipment, Dice):
             if(enemy.health <= 0):
                 enemy.is_alive = False
             return True
-
+        ## If the dice roll isn't a crit but hits
         if((dice_roll + to_hit) >= ac):
             enemy.health -= (self.damage + damage)
             self.gain_exp()
@@ -263,16 +285,16 @@ class Character(Equipment, Dice):
             
         else:
             return False
-
+    ## A Helper function to increase the stats by modifiers 
     def update_character(self):
         self.health = self.con + self.modifiers('con')
         self.ac = self.ac + self.modifiers('dex')
-
+    ## Helper function to give exp to player and checks for level up
     def gain_exp(self):
         self.exp += 10
         if(self.exp >= (self.level * 1000)):
             self.level_up()
-
+    ## Level up's the character and checks if the con mod is positive
     def level_up(self):
         self.level += 1
         if(self.con >= 10):
@@ -287,7 +309,7 @@ class Fighter(Character):
         super().__init__(name, alignment, race)
         self.health_increase = 10
         self.klass = 'fighter'
-    
+    ## Redifine to_hit_bonus to give proper bonus
     def to_hit_bonus(self):
         return self.level
 
