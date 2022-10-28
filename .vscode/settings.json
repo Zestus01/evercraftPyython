@@ -9,9 +9,12 @@
     "python.defaultInterpreterPath": "/workspace/.venv/python/bin/python",
     "cSpell.words": [
         "elven",
+        "equiped",
         "evercraft",
         "gimli",
+        "legolas",
         "mult",
+        "unequip",
         "waraxe"
     ]
 }

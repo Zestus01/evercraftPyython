@@ -88,7 +88,7 @@ class Character(Equipment, Dice):
         self.race = race
         self.race_health_increase = 1
         self.weapon_bonus = 0
-        self.equiped_weapon = '' ## Empty strings false equivilent
+        self.equiped_weapon = '' ## Empty strings false equivalent
         self.equiped_armor = '' 
         self.equiped_shield = ''
         self.klass = 'thing'
@@ -99,7 +99,7 @@ class Character(Equipment, Dice):
             self.race_update()
 
     def equip_armor(self, armor):
-        ## If there already is an equiped weapon unequip it then continue
+        ## If there already is an equiped weapon un-equip it then continue
         if(self.equiped_armor):
             self.unequip_armor()
             ## For each attribute
@@ -141,7 +141,7 @@ class Character(Equipment, Dice):
             ## Same as above if statement
             if(attr.__contains__('race_bonus')):
                 continue
-            ## For the race_target, race_wield, don't cacanate the string
+            ## For the race_target, race_wield, don't concatenates  the string
             if(attr.__contains__('race')):
                 self.__setattr__(attr, self.weapon_list[weapon][attr])
             else:    
@@ -154,7 +154,7 @@ class Character(Equipment, Dice):
             ## If the attr shouldn't be added to the character
             if(attr == 'klass' or attr == 'race' or attr == 'negative'):
                 continue
-            ## Broken up for readibility, as above if statement
+            ## Broken up for readability, as above if statement
             if(attr.__contains__('race_bonus')):
                 continue
             ## For the race_target and race_wield
@@ -225,7 +225,7 @@ class Character(Equipment, Dice):
         if(hasattr(self, 'race_wield_weapon')):
             if(self.race_wield_weapon == self.race):
                 race_wield_weapon_match = True
-        ## If both the wield and target is the corrct race 
+        ## If both the wield and target is the correct race 
         if(race_target_weapon_match and race_wield_weapon_match):
             return self.weapon_list[self.equiped_weapon]['race_bonus_double']
         ## If only one of the races matches the weapon    
@@ -309,7 +309,7 @@ class Fighter(Character):
         super().__init__(name, alignment, race)
         self.health_increase = 10
         self.klass = 'fighter'
-    ## Redifine to_hit_bonus to give proper bonus
+    ## Redefine to_hit_bonus to give proper bonus
     def to_hit_bonus(self):
         return self.level
 

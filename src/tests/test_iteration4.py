@@ -139,7 +139,7 @@ def test_how_long_does_this_take():
 
 def test_elven_sword_bonus_wield_elf():
     estus = Monk('Estus', 'Chaotic', 'elf')
-    rat = Character('Rat', 'Chotic')
+    rat = Character('Rat', 'Chaotic')
     rat.health = 20
     estus.equip_weapon('elven_longsword')
     assert estus.attack(8, rat)
@@ -147,7 +147,7 @@ def test_elven_sword_bonus_wield_elf():
     
 def test_elven_sword_bonus_target_orc():
     estus = Monk('Estus', 'Chaotic', 'halfling')
-    rat = Character('Rat', 'Chotic', 'orc')
+    rat = Character('Rat', 'Chaotic', 'orc')
     rat.health = 20
     estus.equip_weapon('elven_longsword')
     assert estus.attack(10, rat)
@@ -155,7 +155,7 @@ def test_elven_sword_bonus_target_orc():
 
 def test_elven_sword_bonus_both():
     estus = Monk('Estus', 'Chaotic', 'elf')
-    rat = Character('Rat', 'Chotic', 'orc')
+    rat = Character('Rat', 'Chaotic', 'orc')
     rat.health = 20
     estus.equip_weapon('elven_longsword')
     assert estus.attack(8, rat)
@@ -163,13 +163,13 @@ def test_elven_sword_bonus_both():
 
 def test_nun_chucks_monk_bonus():
     estus = Monk('Estus', 'Chaotic', 'elf')
-    rat = Character('Rat', 'Chotic')
+    rat = Character('Rat', 'Chaotic')
     estus.equip_weapon('nun_chucks')
     assert estus.attack(10, rat)
 
 def test_nun_chucks_monk_bonus_miss():
     estus = Monk('Estus', 'Chaotic', 'elf')
-    rat = Character('Rat', 'Chotic')
+    rat = Character('Rat', 'Chaotic')
     rat.equip_weapon('nun_chucks')
     assert not rat.attack(13, estus)
 
