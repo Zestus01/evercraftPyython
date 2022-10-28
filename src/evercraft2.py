@@ -1,26 +1,43 @@
+import random
+
 class Equipment():
-    armor_list = {
+    armor_list = { 
+        'leather_armor': {'ac': 2},
+        'plate_armor': {'klass': 'fighter', 
+                        'race': 'dwarf', 
+                        'ac': 8},
+        'magic_leather': {'ac': 2, 
+                            'damage_received': -2},
+        'shield': {'ac': 3, 
+                    'klass': 'fighter', 
+                    'weapon_bonus': -4, 
+                    'negative': -2}
     }
     weapon_list = {
         'longsword': {'damage': 4},
-        'waraxe': {'damage': 7, 'weapon_bonus': + 2, 'crit_mult': + 1},
-        'elven_longsword': {'damage': 5, 'weapon_bonus': 1, 'race_target': 'orc', 'race_wield': 'elf'},
-        'nun_chucks': {'damage': 5, 'class': 'monk'},
+        'waraxe': {'damage': 7, 
+                    'weapon_bonus': + 2, 
+                    'crit_mult': + 1},
+        'elven_longsword': {'damage': 5, 
+                            'weapon_bonus': 1, 
+                            'race_target_weapon': 'orc', 
+                            'race_wield_weapon': 'elf', 
+                            'race_bonus': 2, 
+                            'race_bonus_double': 5},
+        'nun_chucks': {'damage': 5, 
+                        'klass': 'monk', 
+                        'negative': -4},
     }
     misc_list = dict()
 
-
-    def get_item(self, dictionary, item):
-        return dictionary[item]
-
 class Dice():
-    twenty = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
-    twelve = [1,2,3,4,5,6,7,8,9,10,11,12]
-    eight = [1,2,3,4,5,6,7,8]
-    six = [1,2,3,4,5,6]
-    four = [1,2,3,4]
-
     def roll_dice(self, die):
+        twenty = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+        twelve = [1,2,3,4,5,6,7,8,9,10,11,12]
+        eight = [1,2,3,4,5,6,7,8]
+        six = [1,2,3,4,5,6]
+        four = [1,2,3,4]
+        
         if die == 20:
             roll = random.choice(twenty)
         elif die == 12:
@@ -33,6 +50,7 @@ class Dice():
             roll = random.choice(four)
         elif die == 1:
             roll == 20
+        return roll
 
 class Character(Equipment, Dice):
 
@@ -59,48 +77,83 @@ class Character(Equipment, Dice):
         self.is_pally = False
         self.crit_range = 20
         self.race = race
-        self.race_health = 1
+        self.race_health_increase = 1
         self.weapon_bonus = 0
         self.equiped_weapon = ''
         self.equiped_armor = ''
-        self.klass = 'thing'
+        self.equiped_shield = ''
+        self.klass = ''
+        self.race_target_weapon = ''
+        self.race_wield_weapon = ''
+        self.damage_received = 0
         if(self.race != 'human'):
             self.race_update()
-
-
+    
 
     def equip_armor(self, armor):
         if(self.equiped_armor):
-            self.unequip_armor(self.equiped_armor)
+            self.unequip_armor()
         for attr in self.armor_list[armor]:
-            if(not hasattr(self,  attr)):
+            if(attr == 'klass' or attr == 'race' or attr == 'negative'):
+                continue
+            if(attr.__contains__('race_bonus')):
+                continue
+            if(attr.__contains__('race')):
                 self.__setattr__(attr, self.armor_list[armor][attr])
             else:
                 self.__setattr__(attr, self.__getattribute__(attr) + self.armor_list[armor][attr])
         self.equiped_armor = armor
 
-    def unequip_armor(self, armor):
-        for attr in self.armor_list[armor]:
-            self.__setattr__(attr, self.__getattribute__(attr) - self.armor_list[armor][attr])
+    def unequip_armor(self):
+        for attr in self.armor_list[self.equiped_armor]:
+            if(attr == 'klass' or attr == 'race' or attr == 'negative'):
+                continue
+            if(attr.__contains__('race_bonus')):
+                continue
+            elif(attr.__contains__('race')):
+                self.__setattr__(attr, '')
+            else:
+                self.__setattr__(attr, self.__getattribute__(attr) - self.armor_list[armor][attr])
         self.equiped_armor = ''
 
 
-    def equip_weapon(self, equip):
+    def equip_weapon(self, weapon):
         if(self.equiped_weapon):
-            self.unequip_weapon(self.equiped_weapon)
-        for attr in self.weapon_list[equip]:
-            if(not hasattr(self,  attr)):
-                self.__setattr__(attr, self.weapon_list[equip][attr])
+            self.unequip_weapon()
+        
+        for attr in self.weapon_list[weapon]:
+            if(attr == 'klass' or attr == 'race' or attr == 'negative'):
+                continue
+            if(attr.__contains__('race_bonus')):
+                continue
+            if(attr.__contains__('race')):
+                self.__setattr__(attr, self.weapon_list[weapon][attr])
             else:    
-                self.__setattr__(attr, self.__getattribute__(attr) + self.weapon_list[equip][attr])
-        self.equiped_weapon = equip  
+                self.__setattr__(attr, self.__getattribute__(attr) + self.weapon_list[weapon][attr])
+        self.equiped_weapon = weapon  
 
-    def unequip_weapon(self, equip):
-        for attr in self.weapon_list[equip]:
-            self.__setattr__(attr, self.__getattribute__(attr) - self.weapon_list[equip][attr])
+    def unequip_weapon(self):
+        for attr in self.weapon_list[self.equiped_weapon]:
+            if(attr == 'klass' or attr == 'race' or attr == 'negative'):
+                continue
+            if(attr.__contains__('race_bonus')):
+                continue
+            if(attr.__contains__('race')):
+                self.__setattr__(attr, '')
+            else: 
+                self.__setattr__(attr, self.__getattribute__(attr) - self.weapon_list[self.equiped_weapon][attr])
         self.equiped_weapon = ''            
 
     def race_update(self):
+        if(self.race == 'chaos'):
+            self.str = self.roll_dice(20)
+            self.int = self.roll_dice(20)
+            self.dex = self.roll_dice(20)
+            self.wis = self.roll_dice(20)
+            self.chr = self.roll_dice(20)
+            self.con = self.roll_dice(20)
+            self.ac = 10 + self.modifiers('dex')
+            
         if(self.race == 'orc'):
             self.str += 4
             self.int -= 2
@@ -111,7 +164,7 @@ class Character(Equipment, Dice):
         elif(self.race == 'dwarf'):
             self.con += 2
             self.chr -= 2
-            self.race_health = 2
+            self.race_health_increase = 2
 
         elif(self.race == 'elf'):
             self.dex += 2
@@ -124,7 +177,7 @@ class Character(Equipment, Dice):
             if(self.alignment.__contains__('evil') or self.alignment.__contains__('Evil')):
                 self.alignment = self.alignment.replace('evil', 'neutral')
                 self.alignment = self.alignment.replace('Evil', "Neutral")
-
+        self.update_character()
 
     ## Gets the ability score and does the math to calculate the bonus
     def modifiers(self, ability):
@@ -133,12 +186,40 @@ class Character(Equipment, Dice):
     def to_hit_bonus(self):
         return self.level // 2
 
+    def weapon_bonus_help(self, enemy):
+        if self.equiped_weapon == '':
+            return 0
+        race_target_weapon_match = False
+        race_wield_weapon_match = False
+        ## Checking if the klass can wield the weapon
+        for attr in self.weapon_list[self.equiped_weapon]:
+            if(attr == 'klass' and (self.weapon_list[self.equiped_weapon][attr] != self.klass)):
+                return self.weapon_list[self.equiped_weapon]['negative']
+        ## Checking if race weapon target is the enemy race
+        if(hasattr(self, 'race_target_weapon')):
+            if(self.race_target_weapon == enemy.race):
+                race_target_weapon_match = True
+        ## Checking if the correct race is wielding the weapon                
+        if(hasattr(self, 'race_wield_weapon')):
+            if(self.race_wield_weapon == self.race):
+                race_wield_weapon_match = True
+        ## If both the wield and target is the corrct race 
+        if(race_target_weapon_match and race_wield_weapon_match):
+            return self.weapon_list[self.equiped_weapon]['race_bonus_double']
+        ## If only one of the races matches the weapon    
+        elif(race_target_weapon_match or race_wield_weapon_match):
+            return self.weapon_list[self.equiped_weapon]['race_bonus']
+        else:
+            return 0
+
+        pass
     ## Attack, checks the dice_roll against the enemy's AC. Sets to dead if health is equal to or lower than 0
     def attack(self, dice_roll, enemy):
         ac = enemy.ac + (enemy.modifiers('dex') if not self.ignore_dex else 0)
         smite = 0
         race_mod = 0
-        
+        weapon_race_mod = self.weapon_bonus_help(enemy)
+
         ## If paladin I need to smite evil
         if(self.is_pally):
             if(enemy.alignment.__contains__('Evil') or enemy.alignment.__contains__('evil')):
@@ -159,7 +240,7 @@ class Character(Equipment, Dice):
                 race_mod = 2
 
         ## Damage is increased by stat associated modifier and hit bonus
-        damage = self.modifiers(self.damage_mod) + (self.to_hit_bonus()) + smite + race_mod
+        damage = self.modifiers(self.damage_mod) + (self.to_hit_bonus()) + smite + race_mod + weapon_race_mod + enemy.damage_received
         to_hit = damage + self.weapon_bonus
         ## If the extra damage will take away it resets to 0 
         if(damage < 0):
@@ -168,7 +249,6 @@ class Character(Equipment, Dice):
         ## Critical Hit
         if(dice_roll >= self.crit_range):
             enemy.health -= (self.damage * 2 + (damage * self.crit_mult))
-            self.crit_mult = 2
             self.gain_exp()
             if(enemy.health <= 0):
                 enemy.is_alive = False
@@ -186,6 +266,7 @@ class Character(Equipment, Dice):
 
     def update_character(self):
         self.health = self.con + self.modifiers('con')
+        self.ac = self.ac + self.modifiers('dex')
 
     def gain_exp(self):
         self.exp += 10
@@ -195,14 +276,12 @@ class Character(Equipment, Dice):
     def level_up(self):
         self.level += 1
         if(self.con >= 10):
-            self.health += self.health_increase + (self.modifiers('con') * self.race_health)
+            self.health += self.health_increase + (self.modifiers('con') * self.race_health_increase)
         else:
             self.health += self.health_increase
 
 
-# Iteration 2 bellow here
-
-
+# Iteration 2 below here
 class Fighter(Character):
     def __init__(self, name, alignment, race = 'human'):
         super().__init__(name, alignment, race)
@@ -219,6 +298,7 @@ class Rogue(Character):
         self.damage_mod = 'dex'
         self.crit_mult = self.crit_mult + 1
         self.ignore_dex = True
+        ## Checking the alignment given and forces it to be neutral if good
         if self.alignment.__contains__('good') or self.alignment.__contains__('Good'):
             self.alignment = self.alignment.replace('Good', 'Neutral')
             self.alignment = self.alignment.replace('good', 'neutral')
