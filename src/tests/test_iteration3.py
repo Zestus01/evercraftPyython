@@ -40,19 +40,19 @@ def test_dwarf_race_minus_chr():
 def test_race_dwarf_con_level():
     gimli = Character('Gimli', 'Lawful Good', 'dwarf')
     gimli.level_up()
-    assert gimli.health == 12
+    assert gimli.health == 20
 
 def test_race_dwarf_con_level_two():
     gimli = Character('Gimli', 'Lawful Good', 'dwarf')
     gimli.con = 16
     gimli.level_up()
-    assert gimli.health == 16
+    assert gimli.health == 24
 
 def test_dwarf_hurt_orc():
     gimli = Character('Gimli', 'Lawful Good', 'dwarf')
     josh = Character('josh', 'Chaotic Neutral', 'orc')
     gimli.attack(13, josh)
-    assert josh.health == 2
+    assert josh.health == 7
 
 def test_dwarf_hurt_orc_two():
     gimli = Character('Gimli', 'Lawful Good', 'dwarf')
@@ -62,7 +62,7 @@ def test_dwarf_hurt_orc_two():
 def test_dwarf_not_get_bonus():
     gimli = Character('Gimli', 'Lawful Good', 'dwarf')
     josh = Character('josh', 'Chaotic Neutral', 'elf')
-    assert gimli.attack(11, josh)
+    assert gimli.attack(12, josh)
 
 def test_elf_con_mod():
     estus = Character('estus', 'Chaotic Neutral', 'elf') 
@@ -72,7 +72,7 @@ def test_elf_crit_range():
     estus = Character('estus', 'Chaotic Neutral', 'elf')   
     josh = Character('josh', 'Chaotic Neutral', 'orc')
     estus.attack(19, josh)
-    assert josh.health == 3
+    assert josh.health == 8
 
 def test_elf_extra_dex_ac():
     estus = Character('estus', 'Chaotic Neutral', 'elf')  
@@ -95,7 +95,7 @@ def test_halfling_not_evil():
 def test_halfling_on_halfling_violence():
     stimpy = Character('Stimpy', 'evil', 'halfling')
     frodo = Character('Frodo', 'Good', 'halfling')
-    assert stimpy.attack(12, frodo)
+    assert stimpy.attack(13, frodo)
 
 def test_halfling_bonus_ac():
     stimpy = Character('Stimpy', 'evil', 'halfling')
